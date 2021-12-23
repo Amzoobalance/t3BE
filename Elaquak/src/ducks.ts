@@ -1,7 +1,7 @@
 export const ducks = [
   {
     id: "1",
-    title: "verySmallDuck",
+    title: "Very Small Duck",
     description: "so cute little duck",
     price: 1,
     count: 27,
@@ -10,7 +10,7 @@ export const ducks = [
   },
   {
     id: "3",
-    title: "smallDuck",
+    title: "Small Duck",
     description: "still a cute little duck",
     price: 5,
     count: 40,
@@ -19,7 +19,7 @@ export const ducks = [
   },
   {
     id: "4",
-    title: "midiDuck",
+    title: "Midi Duck",
     description: "the most popular model, suitable for adults and children",
     price: 15,
     count: 550,
@@ -28,7 +28,7 @@ export const ducks = [
   },
   {
     id: "5",
-    title: "bigDuck",
+    title: "Big Duck",
     description: "suitable for a large pool",
     price: 20,
     count: 150,
@@ -37,7 +37,7 @@ export const ducks = [
   },
   {
     id: "6",
-    title: "giantDuck",
+    title: "Giant Duck",
     description: "This duck is suitable for long voyages in the ocean",
     price: 3000,
     count: 3,
