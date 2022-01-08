@@ -1,18 +1,25 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/apiGateway";
 import { formatJSONResponse } from "@libs/apiGateway";
 import { middyfy } from "@libs/lambda";
+import { Pool } from "pg";
+
+const pool = new Pool();
 
 import schema from "../schema";
 
-import { ducks } from "../../ducks";
+const getDuckQuery = (productId: string) =>
+  `select public.ducks.id, title, description, price, image_src, count from public.ducks inner join public.stocks on public.ducks.id=public.stocks.id where public.ducks.id = '${productId}'`;
 
 const getProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
-  const product = ducks.find((x) => x.id === event.pathParameters.productId);
+  const dbResponse = await pool.query(
+    getDuckQuery(event.pathParameters.productId)
+  );
+
   return formatJSONResponse({
-    data: product,
-    message: product ? "success" : "Not Found",
+    data: dbResponse.rows[0],
+    message: dbResponse.rows[0] ? "success" : "Not Found",
   });
 };
 

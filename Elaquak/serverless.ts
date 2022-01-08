@@ -2,6 +2,8 @@ import type { AWS } from "@serverless/typescript";
 
 import getProduct from "./src/functions/get-product";
 import getProducts from "./src/functions/get-products";
+import postProducts from "./src/functions/post-products";
+
 
 const serverlessConfiguration: AWS = {
   service: "elaquak-shop",
@@ -21,14 +23,14 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: "20201221",
   },
   // import the function via paths
-  functions: { getProduct, getProducts },
+  functions: { getProduct, getProducts, postProducts },
   package: { individually: true },
   custom: {
     esbuild: {
       bundle: true,
       minify: false,
       sourcemap: true,
-      exclude: ["aws-sdk"],
+      exclude: ["aws-sdk", "pg-native"],
       target: "node14",
       define: { "require.resolve": undefined },
       platform: "node",
