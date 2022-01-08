@@ -8,7 +8,17 @@ import { Pool } from "pg";
 
 const pool = new Pool();
 
-import schema from "../schema";
+const schema = {
+  type: "object",
+  required: ["title", "description", "price", "image_src", "count"],
+  properties: {
+    title: { type: "string" },
+    description: { type: "string" },
+    price: { type: "number" },
+    image_src: { type: "string" },
+    count: { type: "integer" },
+  },
+} as const;
 
 const createDuckQuery = (
   id: string,
@@ -32,7 +42,7 @@ const getProducts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 ) => {
   const id = randomUUID();
 
-  const { title, description, price, image_src, count } = e.body as any;
+  const { title, description, price, image_src, count } = e.body;
 
   await pool.query(createDuckQuery(id, title, description, price, image_src));
   await pool.query(createCountQuery(id, count));
@@ -40,7 +50,7 @@ const getProducts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   return formatJSONResponse({
     data: {
       id,
-      ...e.body as any,
+      ...e.body,
     },
     message: "success",
   });
