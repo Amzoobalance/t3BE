@@ -23,7 +23,7 @@ const importProductsFile: ValidatedEventAPIGatewayProxyEvent<{}> = async (
     .promise();
 
   return formatJSONResponse(
-    `http://import-products-file-for-elaquak.s3-website-us-east-1.amazonaws.com/${Key}` as any
+    `https://import-products-file-for-elaquak.s3-website-us-east-1.amazonaws.com/${Key}` as any
   );
 };
 

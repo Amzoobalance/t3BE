@@ -4,6 +4,7 @@ import getProduct from "./src/functions/get-product";
 import getProducts from "./src/functions/get-products";
 import postProducts from "./src/functions/post-products";
 import importProductsFile from "./src/functions/import-products-file";
+import importFileParser from "./src/functions/import-file-parser";
 
 
 const serverlessConfiguration: AWS = {
@@ -34,7 +35,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: "20201221",
   },
   // import the function via paths
-  functions: { getProduct, getProducts, postProducts, importProductsFile },
+  functions: { getProduct, getProducts, postProducts, importProductsFile, importFileParser },
   package: { individually: true },
   custom: {
     esbuild: {
