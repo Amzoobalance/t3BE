@@ -1,3 +1,4 @@
+import { createDuckQuery, createCountQuery } from "@functions/common/queries";
 import {
   formatJSONResponse,
   ValidatedEventAPIGatewayProxyEvent,
@@ -20,23 +21,6 @@ const schema = {
   },
 } as const;
 
-const createDuckQuery = (
-  id: string,
-  title: string,
-  description: string,
-  price: number,
-  image_src: string
-) =>
-  `INSERT INTO 
-  public.ducks (id, title, description, price, image_src)
-VALUES
-  ('${id}', '${title}', '${description}', ${price}, '${image_src}')`;
-
-const createCountQuery = (id: string, count: number) => `INSERT INTO
-  public.stocks (id, count)
-VALUES
-  ('${id}', ${count})`;
-
 const getProducts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   e
 ) => {
@@ -44,16 +28,19 @@ const getProducts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
   const { title, description, price, image_src, count } = e.body;
 
-  await pool.query(createDuckQuery(id, title, description, price, image_src));
-  await pool.query(createCountQuery(id, count));
+  try {
+    await pool.query(createDuckQuery(id, title, description, price, image_src));
+    await pool.query(createCountQuery(id, count));
 
-  return formatJSONResponse({
-    data: {
-      id,
-      ...e.body,
-    },
-    message: "success",
-  });
+    const data = { id, title, description, price, image_src, count };
+
+    return formatJSONResponse(200, {
+      data,
+      message: "success",
+    });
+  } catch (e) {
+    return formatJSONResponse(500, { message: e.message });
+  }
 };
 
 export const main = middyfy(getProducts);

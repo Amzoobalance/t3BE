@@ -3,24 +3,17 @@ import {
   ValidatedEventAPIGatewayProxyEvent,
 } from "@libs/apiGateway";
 import { middyfy } from "@libs/lambda";
+import { getDucksListQuery } from "@functions/common/queries";
 import { Pool } from "pg";
 
 const pool = new Pool();
 
-import schema from "../schema";
+const getProducts: ValidatedEventAPIGatewayProxyEvent<{}> = async () => {
+  const dbResponse = await pool.query(getDucksListQuery());
 
-const selectDucksQuery = () =>
-  "select public.ducks.id, title, description, price, image_src, count from public.ducks inner join public.stocks on public.ducks.id=public.stocks.id";
+  const data = dbResponse.rows;
 
-const getProducts: ValidatedEventAPIGatewayProxyEvent<
-  typeof schema
-> = async () => {
-  const dbResponse = await pool.query(selectDucksQuery());
-
-  return formatJSONResponse({
-    data: dbResponse.rows,
-    message: "success",
-  });
+  return formatJSONResponse(200, { data, message: "success" });
 };
 
 export const main = middyfy(getProducts);
